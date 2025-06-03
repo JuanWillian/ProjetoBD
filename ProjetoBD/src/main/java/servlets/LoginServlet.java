@@ -1,7 +1,6 @@
 package servlets;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,8 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.EmailDao;
-import model.EmailModel;
+import dao.CargoDao;
 
 
 @WebServlet("/LoginServlet")
@@ -34,15 +32,19 @@ public class LoginServlet extends HttpServlet {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		
-		EmailDao dao = new EmailDao();
-		List<EmailModel> list = dao.listarTodos();
+		CargoDao dao = new CargoDao();
+		String cargo = dao.verificaCargo(email, password);
 		
-		for (EmailModel emailModel : list) {
-			if(emailModel.getEnderecoEmail().equals(email) && emailModel.getSenha().equals(password)) {
+			if(cargo.equals("GESTOR")) {
 				RequestDispatcher redirecionar = request.getRequestDispatcher("telaPrincipal.jsp");
 				redirecionar.forward(request, response);
+			}else if(cargo.equals("SOLICITANTE")) {
+				//Redireciona para a tela de usuario
+			}else {
+				RequestDispatcher redirecionar = request.getRequestDispatcher("index.jsp");
+				redirecionar.forward(request, response);
 			}
-		}
+		
 	}
 
 }

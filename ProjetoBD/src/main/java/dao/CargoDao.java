@@ -25,7 +25,7 @@ public class CargoDao {
 		try {
 			PreparedStatement insert = connection.prepareStatement(sql);
 			insert.setString(1, model.getNomeCargo());
-			insert.execute();
+			insert.executeUpdate();
 			connection.commit();
 			
 			System.out.println("Salvou as informaões no banco");
@@ -86,12 +86,37 @@ public class CargoDao {
 		return model;
 	}
 	
+	public String verificaCargo(String email, String password) {
+		CargoModel model = new CargoModel();
+		String retorno = null;
+		
+		String sql = "select c.nomeCargo from email e ";
+			   sql+= " join usuario u on e.idUsuarioFk = u.idUsuario ";
+			   sql+= " join cargo c on u.idCargoFk = c.idCargo ";
+			   sql+= "where e.enderecoEmail = " + email + " and e.senha = " + password;
+			   
+			   try {
+				   PreparedStatement statement = connection.prepareStatement(sql);
+					ResultSet resultado = statement.executeQuery();
+					
+					while(resultado.next()) {
+						model.setNomeCargo(resultado.getString("nomeCargo"));
+						retorno = model.getNomeCargo();
+					}
+					
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		
+		return retorno;
+	} 
+	
 	public void deletar(Long id) {
 		String sql = "delete from cargo where id = " + id;
 		
 		try {
 			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.execute();
+			statement.executeUpdate();
 			connection.commit();
 			
 			System.out.println("Deletado com sucesso");

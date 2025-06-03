@@ -27,7 +27,7 @@ public class AuditoriaDao {
 			insert.setLong(1, model.getIdUsuarioFk());
 			insert.setString(2, model.getDataAcao());
 			insert.setString(3, model.getAcao());
-			insert.execute();
+			insert.executeUpdate();
 			connection.commit();
 			
 			System.out.println("Salvou as informaões no banco");
@@ -97,7 +97,7 @@ public class AuditoriaDao {
 		
 		try {
 			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.execute();
+			statement.executeUpdate();
 			connection.commit();
 			
 			System.out.println("Deletado com sucesso");
