@@ -18,7 +18,8 @@
 	<main>
 		<!-- Pesquisem as classes do bootstrap, facilita na estilização pra não ter que usar muito css -->
 		<!-- estilizem mais isso, não sou mt bom fznd front end e design de tela -->
-		<div class="container p-5">
+	<div class="container p-5">
+		<form>
 			<div class="table-wrapper">
 				<div class="table-title">
 					<header>
@@ -30,8 +31,8 @@
 							</div>
 
 						</div>
+					</header>
 				</div>
-				</header>
 				<table class="table table-striped table-hover">
 					<thead>
 						<tr>
@@ -59,17 +60,11 @@
 									class="bi bi-trash"></i></a>
 							</td>
 						</tr>
-
-
 					</tbody>
 				</table>
 			</div>
-
-
-			</form>
-		</div>
-		</div>
-		</div>
+		</form>
+	</div>
 		<!-- Modal de deletar-->
 		<div id="deletarSolicitacao" class="modal fade">
 			<div class="modal-dialog">
