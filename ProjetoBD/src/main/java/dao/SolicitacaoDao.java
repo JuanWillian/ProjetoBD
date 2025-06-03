@@ -51,6 +51,7 @@ public class SolicitacaoDao {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				SolicitacaoModel solicitacao = new SolicitacaoModel();
+				solicitacao.setIdSolicitacao(rs.getLong("idSolicitacao"));
 				solicitacao.setIdUsuarioFk(rs.getLong("idUsuarioFK"));
 				solicitacao.setIdEspacoFK(rs.getLong("idEspacoFK"));
 				solicitacao.setStatus(rs.getString("status"));
