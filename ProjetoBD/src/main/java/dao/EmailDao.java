@@ -27,7 +27,7 @@ public class EmailDao {
 			insert.setString(1, model.getEnderecoEmail());
 			insert.setLong(2, model.getIdUsuarioFk());
 			insert.setString(3, model.getSenha());
-			insert.execute();
+			insert.executeUpdate();
 			connection.commit();
 			
 			System.out.println("Salvou as informaões no banco");
@@ -97,7 +97,7 @@ public class EmailDao {
 		
 		try {
 			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.execute();
+			statement.executeUpdate();
 			connection.commit();
 			
 			System.out.println("Deletado com sucesso");
@@ -113,4 +113,5 @@ public class EmailDao {
 		}
 	}
 
+	
 }

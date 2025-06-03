@@ -33,7 +33,7 @@
   </head>
   <body>
     <main class="form-signin">
-      <form action="Login" method="POST">
+      <form action="LoginServlet" method="POST">
          <h1 class="h3 mb-3 fw-normal text-center">Insira seu login</h1>
 
         <div class="form-floating">
@@ -58,3 +58,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
   </body>
 </html>
+
