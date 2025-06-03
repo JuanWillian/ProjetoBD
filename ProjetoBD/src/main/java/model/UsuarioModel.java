@@ -1,29 +1,23 @@
 package model;
 
 public class UsuarioModel {
-	private int idUsuario;
-	private int idCargoFK;
+	private Long idUsuario;
+	private Long idCargoFK;
 	private String nomeUsuario;
-	
-	public UsuarioModel(int idUsuario, int idCargoFK, String nomeUsuario) {
-		this.idUsuario = idUsuario;
-		this.idCargoFK = idCargoFK;
-		this.nomeUsuario = nomeUsuario;
-	}
 
-	public int getIdUsuario() {
+	public Long getIdUsuario() {
 		return idUsuario;
 	}
 
-	public void setIdUsuario(int idUsuario) {
+	public void setIdUsuario(Long idUsuario) {
 		this.idUsuario = idUsuario;
 	}
 
-	public int getIdCargoFK() {
+	public Long getIdCargoFK() {
 		return idCargoFK;
 	}
 
-	public void setIdCargoFK(int idCargoFK) {
+	public void setIdCargoFK(Long idCargoFK) {
 		this.idCargoFK = idCargoFK;
 	}
 
@@ -34,5 +28,5 @@ public class UsuarioModel {
 	public void setNomeUsuario(String nomeUsuario) {
 		this.nomeUsuario = nomeUsuario;
 	}
-	
+
 }

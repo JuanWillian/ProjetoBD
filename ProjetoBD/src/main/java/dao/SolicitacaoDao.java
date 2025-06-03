@@ -17,7 +17,7 @@ public class SolicitacaoDao {
 	}
 
 	public void insert(SolicitacaoModel solicitacao) {
-		String sql = "INSERT INTO solicitacao VALUES (?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO solicitacao(idUsuarioFK, idEspacoFK, status, dataSolicitacao, dataReserva, horarioInicio, horarioFim) VALUES (?, ?, ?, ?, ?, ?, ?)";
 		try {
 			PreparedStatement ps = connection.prepareStatement(sql);
 			ps.setLong(1, solicitacao.getIdUsuarioFk());
@@ -27,7 +27,7 @@ public class SolicitacaoDao {
 			ps.setString(5, solicitacao.getDataReserva());
 			ps.setString(6, solicitacao.getHorarioInicio());
 			ps.setString(7, solicitacao.getHorarioFim());
-			ps.execute();
+			ps.executeUpdate();
 			connection.commit();
 			System.out.println("As informações foram salvas");
 
@@ -74,7 +74,7 @@ public class SolicitacaoDao {
 
 	}
 
-	public SolicitacaoModel listarPorId(Long idSolicitacao) {
+	public SolicitacaoModel buscarPorId(Long idSolicitacao) {
 		SolicitacaoModel solicitacao = new SolicitacaoModel();
 		String sql = "SELECT * FROM solicitacao WHERE idSolicitacao = ?";
 		try {
@@ -108,6 +108,7 @@ public class SolicitacaoDao {
 		String sql = "DELETE FROM solicitacao WHERE idSolicitacao = ?";
 		try {
 			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setLong(1, idSolicitacao);
 			ps.execute();
 			connection.commit();
 
