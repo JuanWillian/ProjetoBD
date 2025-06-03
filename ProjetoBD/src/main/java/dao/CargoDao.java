@@ -88,7 +88,7 @@ public class CargoDao {
 	
 	public String verificaCargo(String email, String password) {
 		CargoModel model = new CargoModel();
-		String retorno = null;
+		String retorno = "www";
 		
 		String sql = "select c.nomeCargo from email e ";
 			   sql+= " join usuario u on e.idUsuarioFk = u.idUsuario ";
