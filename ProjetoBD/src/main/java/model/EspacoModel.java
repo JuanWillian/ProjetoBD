@@ -1,25 +1,17 @@
 package model;
 
 public class EspacoModel {
-	private int idEspaco;
+	private Long idEspaco;
 	private String nome;
 	private String numero;
-	private int idTipoEspacoFK;
+	private Long idTipoEspacoFK;
 	private Double metragem;
 
-	public EspacoModel(int idEspaco, String nome, String numero, int idTipoEspacoFK, Double metragem) {
-		this.idEspaco = idEspaco;
-		this.nome = nome;
-		this.numero = numero;
-		this.idTipoEspacoFK = idTipoEspacoFK;
-		this.metragem = metragem;
-	}
-
-	public int getIdEspaco() {
+    public Long getIdEspaco() {
 		return idEspaco;
 	}
 
-	public void setIdEspaco(int idEspaco) {
+	public void setIdEspaco(Long idEspaco) {
 		this.idEspaco = idEspaco;
 	}
 
@@ -39,11 +31,11 @@ public class EspacoModel {
 		this.numero = numero;
 	}
 
-	public int getIdTipoEspacoFK() {
+	public Long getIdTipoEspacoFK() {
 		return idTipoEspacoFK;
 	}
 
-	public void setIdTipoEspacoFK(int idTipoEspacoFK) {
+	public void setIdTipoEspacoFK(Long idTipoEspacoFK) {
 		this.idTipoEspacoFK = idTipoEspacoFK;
 	}
 
