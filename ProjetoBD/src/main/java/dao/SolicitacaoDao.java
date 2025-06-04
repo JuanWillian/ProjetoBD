@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import connection.SingleConnection;
 import model.SolicitacaoModel;
@@ -125,6 +126,39 @@ public class SolicitacaoDao {
 			System.out.println("As informações não foram salvas no banco");
 			e.printStackTrace();
 		}
+	}
+	
+	public List<SolicitacaoModel> listarSolicitacoesPorUsuario(String email, String senha) throws SQLException{
+		CriarSolicitacaoDao dao = new CriarSolicitacaoDao();
+		Long idUsuario = dao.getIdUsuarioPorEmailSenha(email, senha);
+		
+		 String sql = "select idSolicitacao, idUsuarioFk, idEspacoFk, status, dataSolicitacao, dataReserva, horarioInicio, horarioFim from solicitacao where idUsuarioFk = " + idUsuario + " ORDER BY dataReserva DESC";
+		 
+		 List<SolicitacaoModel> solicitacoes = new ArrayList<>();
+		 
+		 try {
+			 PreparedStatement statement = connection.prepareStatement(sql);
+			 ResultSet resultado = statement.executeQuery();
+			 
+			 while (resultado.next()) {
+	                SolicitacaoModel s = new SolicitacaoModel();
+	                s.setIdSolicitacao(resultado.getLong("idSolicitacao"));
+	                s.setIdUsuarioFk(resultado.getLong("idUsuarioFk"));
+	                s.setIdEspacoFK(resultado.getLong("idEspacoFk"));
+	                s.setStatus(resultado.getString("status"));
+	                s.setDataSolicitacao(resultado.getString("dataSolicitacao"));
+	                s.setDataReserva(resultado.getString("dataReserva"));
+	                s.setHorarioInicio(resultado.getString("horarioInicio"));
+	                s.setHorarioFim(resultado.getString("horarioFim"));
+	                solicitacoes.add(s);
+	            }
+			 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		 
+		return solicitacoes;
+	
 	}
 
 }
