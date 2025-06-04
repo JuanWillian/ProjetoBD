@@ -86,7 +86,7 @@ body {
 		aria-labelledby="novaSolicitacaoLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form action="" method="POST">
+				<form action="SolicitanteServlet" method="POST">
 					<div class="modal-header bg-primary text-white">
 						<h5 class="modal-title" id="novaSolicitacaoLabel">Nova
 							Solicitação</h5>

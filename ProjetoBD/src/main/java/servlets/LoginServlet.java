@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.CargoDao;
 import dao.CriarSolicitacaoDao;
+import dao.SolicitacaoDao;
+import model.SolicitacaoModel;
 
 
 @WebServlet(urlPatterns = {"/LoginServlet", "/SolicitanteServlet"})
@@ -30,6 +33,21 @@ public class LoginServlet extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		 SolicitacaoDao solicitacao = new SolicitacaoDao();
+         List<SolicitacaoModel> solicitacoes;
+		try {
+			solicitacoes = solicitacao.listarSolicitacoesPorUsuario(email, email);
+			if(solicitacoes.isEmpty()) {
+		         request.setAttribute("Erro", "Nenhuma solicitação cadastrada" );
+		    }
+			request.setAttribute("lista", solicitacoes);
+	        request.getRequestDispatcher("telaSolicitante.jsp").forward(request, response);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+         
+         
 	}
 
 	
@@ -62,10 +80,10 @@ public class LoginServlet extends HttpServlet {
 		
 		if(acao.equals("/SolicitanteServlet")) {
 			
-			String dataReserva = request.getParameter("");
-			String horarioInicio = request.getParameter("");
-			String horarioFim = request.getParameter("");
-			String nomeEspaco = request.getParameter("");
+			String dataReserva = request.getParameter("data");
+			String horarioInicio = request.getParameter("horarioInicio");
+			String horarioFim = request.getParameter("horarioFim");
+			String nomeEspaco = request.getParameter("sala");
 			
 			CriarSolicitacaoDao dao = new CriarSolicitacaoDao();
 			dao.cadastrarSolicitacao(email, password, dataReserva, horarioInicio, horarioFim, nomeEspaco);
