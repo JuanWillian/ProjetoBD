@@ -161,5 +161,23 @@ public class SolicitacaoDao {
 	
 	}
 
-
+	public void aceitarSolicitacao(Long idSolicitacao) {
+		String sql = "UPDATE sc.status FROM solicitacao sc SET sc.status = ? WHERE sc.idSolicitacao = ?";
+		try {
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setString(1, "APROVADA"); 
+			ps.setLong(2, idSolicitacao);
+			ps.executeUpdate();
+			connection.commit();
+		}catch(Exception e) {
+			try {
+				connection.rollback();
+				System.out.println("Alterações revertidas no banco");
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+			System.out.println("As informações não foram salvas no banco");
+			e.printStackTrace();
+		}
+	}
 }
