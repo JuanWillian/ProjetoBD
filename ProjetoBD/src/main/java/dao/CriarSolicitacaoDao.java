@@ -37,14 +37,17 @@ public class CriarSolicitacaoDao {
 		
 		try {
 			PreparedStatement insert = connection.prepareStatement(sql);
-			insert.setLong(1,idUsuario);
-			insert.setLong(2,idEspaco);
-			insert.setString(3,dataFormatada);
-			insert.setString(4,dataSolicitacao);
-			insert.setString(5,horarioInicio);
-			insert.setString(6,horarioFim);
+			insert.setLong(1, idUsuario);
+			insert.setLong(2, idEspaco);
+			insert.setString(3, dataFormatada);
+			insert.setString(4, dataSolicitacao);
+			insert.setString(5, horarioInicio);
+			insert.setString(6, horarioFim);
+			insert.executeUpdate(); // CORRIGIDO: executa o insert
+			connection.commit();
 		} catch (Exception e) {
-			e.printStackTrace();
+			connection.rollback();
+			throw e;
 		}
 		
 	}
@@ -55,7 +58,11 @@ public class CriarSolicitacaoDao {
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, nomeEspaco);
 		ResultSet resultado = statement.executeQuery();
-		return resultado.getLong("idEspaco");
+		if (resultado.next()) {
+			return resultado.getLong("idEspaco");
+		} else {
+			throw new SQLException("Espaço não encontrado: " + nomeEspaco);
+		}
 	}
 	
 	public Long getIdUsuarioPorEmailSenha(String email, String senha) throws SQLException {
@@ -65,7 +72,11 @@ public class CriarSolicitacaoDao {
 			 statement.setString(1, email);
 			 statement.setString(2, senha); 
 			 ResultSet resultado = statement.executeQuery();
-		 return resultado.getLong("idUsuario");
+			 if (resultado.next()) {
+			        return resultado.getLong("idUsuario");
+			    } else {
+			        throw new SQLException("Usuário não encontrado para o email e senha informados.");
+			    }
 	}
 	
 	public void cadastraAuditoria(String email, String senha) throws SQLException, ParseException {
@@ -80,11 +91,14 @@ public class CriarSolicitacaoDao {
 		
 		try {
 			PreparedStatement insert = connection.prepareStatement(sql);
-			insert.setLong(1,idUsuario);
+			insert.setLong(1, idUsuario);
 			insert.setString(2, dataFormatada);
-			insert.setString(3,"Solicitação");
+			insert.setString(3, "Solicitação");
+			insert.executeUpdate(); // CORRIGIDO: executa o insert
+			connection.commit();
 		} catch (Exception e) {
-			e.printStackTrace();
+			connection.rollback();
+			throw e;
 		}
 	}
 

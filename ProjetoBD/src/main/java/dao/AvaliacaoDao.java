@@ -32,7 +32,7 @@ public class AvaliacaoDao {
 			insert.executeUpdate();
 			connection.commit();
 			
-			System.out.println("Salvou as informaões no banco");
+			System.out.println("Salvou as informações no banco");
 		} catch (Exception e) {
 			try {
 				System.out.println("Alterações revertidas no banco");
@@ -40,7 +40,7 @@ public class AvaliacaoDao {
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-			System.out.println("Não salvou as informaões no banco");
+			System.out.println("Não salvou as informações no banco");
 			e.printStackTrace();
 		}
 	}

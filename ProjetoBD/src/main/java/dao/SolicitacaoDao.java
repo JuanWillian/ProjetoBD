@@ -162,10 +162,10 @@ public class SolicitacaoDao {
 	}
 
 	public void aceitarSolicitacao(Long idSolicitacao) {
-		String sql = "UPDATE sc.status FROM solicitacao sc SET sc.status = ? WHERE sc.idSolicitacao = ?";
+		String sql = "UPDATE solicitacao SET status = ? WHERE idSolicitacao = ?";
 		try {
 			PreparedStatement ps = connection.prepareStatement(sql);
-			ps.setString(1, "APROVADA"); 
+			ps.setString(1, "APROVADA");
 			ps.setLong(2, idSolicitacao);
 			ps.executeUpdate();
 			connection.commit();

@@ -40,6 +40,7 @@ public class Main {
             }
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
+            // Após ler um int, consome a quebra de linha
             int opcao = scanner.nextInt();
             scanner.nextLine();
             if (opcao == 0) break;
@@ -132,7 +133,7 @@ public class Main {
                     }
                     break;
                 case 4:
-                    if (usuarioLogado != null && cargoLogado.equalsIgnoreCase("solicitante")) {
+                    if (usuarioLogado != null && cargoLogado != null && cargoLogado.trim().toLowerCase().equals("solicitante")) {
                         try {
                             System.out.println("Espaços disponíveis:");
                             List<EspacoModel> espacos = espacoDao.listar();
@@ -157,7 +158,7 @@ public class Main {
                     }
                     break;
                 case 5:
-                    if (usuarioLogado != null && cargoLogado.equalsIgnoreCase("gestor")) {
+                    if (usuarioLogado != null && cargoLogado != null && cargoLogado.trim().toLowerCase().equals("gestor")) {
                         try {
                             List<SolicitacaoModel> solicitacoes = solicitacaoDao.listarTodos();
                             for (SolicitacaoModel s : solicitacoes) {
