@@ -7,12 +7,14 @@ import dao.SolicitacaoDao;
 import dao.CriarSolicitacaoDao;
 import dao.EspacoDao;
 import dao.AvaliacaoDao;
+import dao.AuditoriaDao;
 import model.UsuarioModel;
 import model.EmailModel;
 import model.SolicitacaoModel;
 import model.EspacoModel;
 import model.CargoModel;
 import model.AvaliacaoModel;
+import model.AuditoriaModel;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -150,6 +152,14 @@ public class Main {
                             String horarioFim = scanner.nextLine();
                             criarSolicitacaoDao.cadastrarSolicitacaoPorId(emailLogado, senhaLogado, dataReserva, horarioInicio, horarioFim, idEspaco);
                             System.out.println("Solicitação cadastrada!");
+                            // Auditoria do cadastro de solicitação
+                            AuditoriaDao auditoriaDao = new AuditoriaDao();
+                            AuditoriaModel auditoria = new AuditoriaModel();
+                            auditoria.setIdUsuarioFk(usuarioLogado.getIdUsuario());
+                            auditoria.setDataAcao(LocalDate.now().toString());
+                            auditoria.setAcao("Cadastro de solicitação (Espaço ID: " + idEspaco + ")");
+                            auditoriaDao.salvar(auditoria);
+                            System.out.println("--- Auditoria registrada ---");
                         } catch (Exception e) {
                             System.out.println("Erro ao cadastrar solicitação: " + e.getMessage());
                         }
@@ -177,13 +187,16 @@ public class Main {
                             String justificativa = scanner.nextLine();
                             Long idGestor = usuarioLogado.getIdUsuario();
                             String statusAvaliacao;
+                            String acaoAuditoria;
                             if (acao.equalsIgnoreCase("A")) {
                                 solicitacaoDao.aceitarSolicitacao(idSol);
                                 statusAvaliacao = "APROVADO";
+                                acaoAuditoria = "Aprovação de solicitação";
                                 System.out.println("Solicitação aprovada!");
                             } else if (acao.equalsIgnoreCase("R")) {
                                 solicitacaoDao.rejeitarSolicitacao(idSol);
                                 statusAvaliacao = "REJEITADO";
+                                acaoAuditoria = "Rejeição de solicitação";
                                 System.out.println("Solicitação rejeitada!");
                             } else {
                                 System.out.println("Ação inválida!");
@@ -199,6 +212,13 @@ public class Main {
                             String dataAvaliacao = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                             avaliacao.setDataAvaliacao(dataAvaliacao);
                             avaliacaoDao.salvar(avaliacao);
+                            // Auditoria da avaliação
+                            AuditoriaDao auditoriaDao = new AuditoriaDao();
+                            AuditoriaModel auditoria = new AuditoriaModel();
+                            auditoria.setIdUsuarioFk(idGestor);
+                            auditoria.setDataAcao(dataAvaliacao);
+                            auditoria.setAcao("Avaliação: " + acaoAuditoria + " (Solicitação ID: " + idSol + ")");
+                            auditoriaDao.salvar(auditoria);
                             System.out.println("--- Avaliação registrada ---");
                             System.out.println("ID do gestor: " + idGestor);
                             System.out.println("Justificativa: " + justificativa);
