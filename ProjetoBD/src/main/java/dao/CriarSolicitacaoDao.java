@@ -124,14 +124,15 @@ public class CriarSolicitacaoDao {
 		} catch (ParseException e) {
 			throw new SQLException("Horário em formato inválido. Use HH:mm");
 		}
-		String sql = "insert into solicitacao (idUsuarioFk, idEspacoFk, status, dataSolicitacao, dataReserva, horarioInicio, horarioFim) values (?, ?, DEFAULT, CURRENT_DATE, ?, ?, ?)";
+		String sql = "insert into solicitacao (idUsuarioFk, idEspacoFk, status, dataSolicitacao, dataReserva, horarioInicio, horarioFim) values (?, ?, ?, CURRENT_DATE, ?, ?, ?)";
 		try {
 			PreparedStatement insert = connection.prepareStatement(sql);
 			insert.setLong(1, idUsuario);
 			insert.setLong(2, idEspaco);
-			insert.setDate(3, dataReservaSql); 
-			insert.setTime(4, horarioInicioSql);
-			insert.setTime(5, horarioFimSql); 
+			insert.setString(3, "PENDENTE"); 
+			insert.setDate(4, dataReservaSql);
+			insert.setTime(5, horarioInicioSql);
+			insert.setTime(6, horarioFimSql);
 			insert.executeUpdate();
 			connection.commit();
 		} catch (Exception e) {

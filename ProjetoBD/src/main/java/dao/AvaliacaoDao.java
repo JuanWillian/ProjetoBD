@@ -27,7 +27,6 @@ public class AvaliacaoDao {
 			insert.setLong(1, model.getIdGestorFk());
 			insert.setString(2, model.getJustificativa());
 			insert.setLong(3, model.getIdSolicitacaoFk());
-			// Salva como java.sql.Date se disponível, senão como String
 			if (model.getDataAvaliacaoSql() != null) {
 				insert.setDate(4, model.getDataAvaliacaoSql());
 			} else {
