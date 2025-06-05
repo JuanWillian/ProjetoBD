@@ -107,7 +107,6 @@ public class Main {
                     EmailModel emailModel = new EmailModel();
                     emailModel.setEnderecoEmail(email);
                     emailModel.setSenha(senha);
-                    // Buscar o id do usuário recém cadastrado
                     ArrayList<UsuarioModel> usuarios = usuarioDao.listarTodos();
                     Long idUsuario = usuarios.get(usuarios.size()-1).getIdUsuario();
                     emailModel.setIdUsuarioFk(idUsuario);
@@ -140,15 +139,15 @@ public class Main {
                             for (EspacoModel esp : espacos) {
                                 System.out.println("ID: " + esp.getIdEspaco() + ", Nome: " + esp.getNome());
                             }
-                            System.out.print("Digite o nome do espaço: ");
-                            String nomeEspaco = scanner.nextLine();
+                            System.out.print("Digite o id do espaço: ");
+                            Long idEspaco = Long.parseLong(scanner.nextLine());
                             System.out.print("Data da reserva (dd/MM/yyyy): ");
                             String dataReserva = scanner.nextLine();
                             System.out.print("Horário início (HH:mm): ");
                             String horarioInicio = scanner.nextLine();
                             System.out.print("Horário fim (HH:mm): ");
                             String horarioFim = scanner.nextLine();
-                            criarSolicitacaoDao.cadastrarSolicitacao(emailLogado, senhaLogado, dataReserva, horarioInicio, horarioFim, nomeEspaco);
+                            criarSolicitacaoDao.cadastrarSolicitacaoPorId(emailLogado, senhaLogado, dataReserva, horarioInicio, horarioFim, idEspaco);
                             System.out.println("Solicitação cadastrada!");
                         } catch (Exception e) {
                             System.out.println("Erro ao cadastrar solicitação: " + e.getMessage());

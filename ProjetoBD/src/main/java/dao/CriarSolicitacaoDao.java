@@ -101,5 +101,31 @@ public class CriarSolicitacaoDao {
 			throw e;
 		}
 	}
+	
+	public void cadastrarSolicitacaoPorId(String email, String senha, String dataReserva, String horarioInicio, String horarioFim, Long idEspaco) throws ParseException, SQLException {
+        Long idUsuario = getIdUsuarioPorEmailSenha(email, senha);
+        DateTimeFormatter formatoEntrada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate data = LocalDate.parse(dataReserva, formatoEntrada);
+        DateTimeFormatter formatoSaida = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String dataSolicitacao = data.format(formatoSaida);
+        LocalDate dataAtual = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String dataFormatada = dataAtual.format(formatter);
+        String sql = "insert into solicitacao (idUsuarioFk, idEspacoFk, status, dataSolicitacao, dataReserva, horarioInicio, horarioFim) values (?, ?, DEFAULT, ?, ?, ?, ?)";
+        try {
+            PreparedStatement insert = connection.prepareStatement(sql);
+            insert.setLong(1, idUsuario);
+            insert.setLong(2, idEspaco);
+            insert.setString(3, dataFormatada);
+            insert.setString(4, dataSolicitacao);
+            insert.setString(5, horarioInicio);
+            insert.setString(6, horarioFim);
+            insert.executeUpdate();
+            connection.commit();
+        } catch (Exception e) {
+            connection.rollback();
+            throw e;
+        }
+    }
 
 }
