@@ -169,7 +169,7 @@ public class SolicitacaoDao {
 		String sql = "UPDATE solicitacao SET status = ? WHERE idSolicitacao = ?";
 		try {
 			PreparedStatement ps = connection.prepareStatement(sql);
-			ps.setString(1, "APROVADA");
+			ps.setString(1, "APROVADO");
 			ps.setLong(2, idSolicitacao);
 			ps.executeUpdate();
 			connection.commit();
