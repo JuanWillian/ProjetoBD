@@ -156,7 +156,7 @@ public class Main {
                             AuditoriaDao auditoriaDao = new AuditoriaDao();
                             AuditoriaModel auditoria = new AuditoriaModel();
                             auditoria.setIdUsuarioFk(usuarioLogado.getIdUsuario());
-                            auditoria.setDataAcao(LocalDate.now().toString());
+                            auditoria.setDataAcao(java.sql.Date.valueOf(LocalDate.now()));
                             auditoria.setAcao("Cadastro de solicitação (Espaço ID: " + idEspaco + ")");
                             auditoriaDao.salvar(auditoria);
                             System.out.println("--- Auditoria registrada ---");
@@ -216,7 +216,7 @@ public class Main {
                             AuditoriaDao auditoriaDao = new AuditoriaDao();
                             AuditoriaModel auditoria = new AuditoriaModel();
                             auditoria.setIdUsuarioFk(idGestor);
-                            auditoria.setDataAcao(dataAvaliacao);
+                            auditoria.setDataAcao(java.sql.Date.valueOf(dataAvaliacao));
                             auditoria.setAcao("Avaliação: " + acaoAuditoria + " (Solicitação ID: " + idSol + ")");
                             auditoriaDao.salvar(auditoria);
                             System.out.println("--- Avaliação registrada ---");
