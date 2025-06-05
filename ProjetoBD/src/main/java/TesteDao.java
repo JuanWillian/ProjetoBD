@@ -11,17 +11,9 @@ import model.CargoModel;
 public class TesteDao {
 	public static void main(String[] args) throws ParseException {
 		
-		CargoModel cargo = new CargoModel();
-		cargo.setNomeCargo("GESTOR");
-		
 		CargoDao cargoDao = new CargoDao();
-		cargoDao.salvar(cargo);
+		System.out.println(cargoDao.verificaCargo("ana@empresa.com", "senha123"));
 		
-		List<CargoModel> list = cargoDao.listarTodos();
-		for (CargoModel cargoModel : list) {
-			System.out.println(cargoModel);
-			System.out.println();
-		}
 	
     
 	}

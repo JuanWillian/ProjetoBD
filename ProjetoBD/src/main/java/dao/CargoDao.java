@@ -93,12 +93,13 @@ public class CargoDao {
 		String sql = "select c.nomeCargo from email e ";
 			   sql+= " join usuario u on e.idUsuarioFk = u.idUsuario ";
 			   sql+= " join cargo c on u.idCargoFk = c.idCargo ";
-			   sql+= "where e.enderecoEmail = " + email + " and e.senha = " + password;
+			   sql+= "where e.enderecoEmail = ? and e.senha = ?";
 			   
 			   try {
 				   PreparedStatement statement = connection.prepareStatement(sql);
+					statement.setString(1, email);
+					statement.setString(2, password);
 					ResultSet resultado = statement.executeQuery();
-					
 					while(resultado.next()) {
 						model.setNomeCargo(resultado.getString("nomeCargo"));
 						retorno = model.getNomeCargo();
