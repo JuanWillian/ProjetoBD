@@ -27,7 +27,12 @@ public class AvaliacaoDao {
 			insert.setLong(1, model.getIdGestorFk());
 			insert.setString(2, model.getJustificativa());
 			insert.setLong(3, model.getIdSolicitacaoFk());
-			insert.setString(4, model.getDataAvaliacao());
+			// Salva como java.sql.Date se disponível, senão como String
+			if (model.getDataAvaliacaoSql() != null) {
+				insert.setDate(4, model.getDataAvaliacaoSql());
+			} else {
+				insert.setString(4, model.getDataAvaliacao());
+			}
 			insert.setString(5, model.getStatus());
 			insert.executeUpdate();
 			connection.commit();
