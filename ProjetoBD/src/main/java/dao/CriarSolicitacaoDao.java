@@ -43,7 +43,7 @@ public class CriarSolicitacaoDao {
 			insert.setString(4, dataSolicitacao);
 			insert.setString(5, horarioInicio);
 			insert.setString(6, horarioFim);
-			insert.executeUpdate(); // CORRIGIDO: executa o insert
+			insert.executeUpdate(); 
 			connection.commit();
 		} catch (Exception e) {
 			connection.rollback();
@@ -94,7 +94,7 @@ public class CriarSolicitacaoDao {
 			insert.setLong(1, idUsuario);
 			insert.setString(2, dataFormatada);
 			insert.setString(3, "Solicitação");
-			insert.executeUpdate(); // CORRIGIDO: executa o insert
+			insert.executeUpdate(); 
 			connection.commit();
 		} catch (Exception e) {
 			connection.rollback();
@@ -105,6 +105,7 @@ public class CriarSolicitacaoDao {
 	public void cadastrarSolicitacaoPorId(String email, String senha, String dataReserva, String horarioInicio,
 			String horarioFim, Long idEspaco) throws ParseException, SQLException {
 		Long idUsuario = getIdUsuarioPorEmailSenha(email, senha);
+		// Converte a string para java.sql.Date
 		java.sql.Date dataReservaSql = null;
 		try {
 			java.util.Date utilDate = new java.text.SimpleDateFormat("dd/MM/yyyy").parse(dataReserva);
@@ -112,14 +113,25 @@ public class CriarSolicitacaoDao {
 		} catch (ParseException e) {
 			throw new SQLException("Data em formato inválido. Use dd/MM/yyyy");
 		}
+		// Converte horários para java.sql.Time
+		java.sql.Time horarioInicioSql = null;
+		java.sql.Time horarioFimSql = null;
+		try {
+			java.util.Date utilInicio = new java.text.SimpleDateFormat("HH:mm").parse(horarioInicio);
+			java.util.Date utilFim = new java.text.SimpleDateFormat("HH:mm").parse(horarioFim);
+			horarioInicioSql = new java.sql.Time(utilInicio.getTime());
+			horarioFimSql = new java.sql.Time(utilFim.getTime());
+		} catch (ParseException e) {
+			throw new SQLException("Horário em formato inválido. Use HH:mm");
+		}
 		String sql = "insert into solicitacao (idUsuarioFk, idEspacoFk, status, dataSolicitacao, dataReserva, horarioInicio, horarioFim) values (?, ?, DEFAULT, CURRENT_DATE, ?, ?, ?)";
 		try {
 			PreparedStatement insert = connection.prepareStatement(sql);
 			insert.setLong(1, idUsuario);
 			insert.setLong(2, idEspaco);
 			insert.setDate(3, dataReservaSql); 
-			insert.setString(4, horarioInicio);
-			insert.setString(5, horarioFim);
+			insert.setTime(4, horarioInicioSql);
+			insert.setTime(5, horarioFimSql); 
 			insert.executeUpdate();
 			connection.commit();
 		} catch (Exception e) {

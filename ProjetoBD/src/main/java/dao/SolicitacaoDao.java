@@ -24,10 +24,14 @@ public class SolicitacaoDao {
 			ps.setLong(1, solicitacao.getIdUsuarioFk());
 			ps.setLong(2, solicitacao.getIdEspacoFK());
 			ps.setString(3, solicitacao.getStatus());
-			ps.setString(4, solicitacao.getDataSolicitacao());
-			ps.setString(5, solicitacao.getDataReserva());
-			ps.setString(6, solicitacao.getHorarioInicio());
-			ps.setString(7, solicitacao.getHorarioFim());
+			java.sql.Date dataSolicitacao = java.sql.Date.valueOf(solicitacao.getDataSolicitacao()); 
+			java.sql.Date dataReserva = java.sql.Date.valueOf(solicitacao.getDataReserva()); 
+			java.sql.Time horarioInicio = java.sql.Time.valueOf(solicitacao.getHorarioInicio() + ":00"); 
+			java.sql.Time horarioFim = java.sql.Time.valueOf(solicitacao.getHorarioFim() + ":00"); 
+			ps.setDate(4, dataSolicitacao);
+			ps.setDate(5, dataReserva);
+			ps.setTime(6, horarioInicio);
+			ps.setTime(7, horarioFim);
 			ps.executeUpdate();
 			connection.commit();
 			System.out.println("As informações foram salvas");
