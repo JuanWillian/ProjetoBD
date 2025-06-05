@@ -6,11 +6,15 @@ import dao.EmailDao;
 import dao.SolicitacaoDao;
 import dao.CriarSolicitacaoDao;
 import dao.EspacoDao;
+import dao.AvaliacaoDao;
 import model.UsuarioModel;
 import model.EmailModel;
 import model.SolicitacaoModel;
 import model.EspacoModel;
 import model.CargoModel;
+import model.AvaliacaoModel;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -40,7 +44,6 @@ public class Main {
             }
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
-            // Após ler um int, consome a quebra de linha
             int opcao = scanner.nextInt();
             scanner.nextLine();
             if (opcao == 0) break;
@@ -118,16 +121,14 @@ public class Main {
                     emailLogado = scanner.nextLine();
                     System.out.print("Digite a senha: ");
                     senhaLogado = scanner.nextLine();
-                    cargoLogado = cargoDao.verificaCargo(emailLogado, senhaLogado);
-                    if (!cargoLogado.equals("www")) {
-                        try {
-                            Long idUser = criarSolicitacaoDao.getIdUsuarioPorEmailSenha(emailLogado, senhaLogado);
-                            usuarioLogado = usuarioDao.BuscarPorId(idUser);
-                            System.out.println("Login realizado como: " + usuarioLogado.getNomeUsuario() + " (" + cargoLogado + ")");
-                        } catch (Exception e) {
-                            System.out.println("Erro ao buscar usuário.");
-                        }
-                    } else {
+                    try {
+                        Long idUser = criarSolicitacaoDao.getIdUsuarioPorEmailSenha(emailLogado, senhaLogado);
+                        usuarioLogado = usuarioDao.BuscarPorId(idUser);
+                        cargoLogado = cargoDao.verificaCargo(emailLogado, senhaLogado);
+                        System.out.println("Login realizado como: " + usuarioLogado.getNomeUsuario() + " (" + cargoLogado + ")");
+                    } catch (Exception e) {
+                        usuarioLogado = null;
+                        cargoLogado = null;
                         System.out.println("Email ou senha inválidos!");
                     }
                     break;
@@ -181,13 +182,23 @@ public class Main {
                                 statusAvaliacao = "APROVADO";
                                 System.out.println("Solicitação aprovada!");
                             } else if (acao.equalsIgnoreCase("R")) {
-                                solicitacaoDao.delete(idSol);
+                                solicitacaoDao.rejeitarSolicitacao(idSol);
                                 statusAvaliacao = "REJEITADO";
-                                System.out.println("Solicitação rejeitada e removida!");
+                                System.out.println("Solicitação rejeitada!");
                             } else {
                                 System.out.println("Ação inválida!");
                                 break;
                             }
+                            // Salvar avaliação no banco
+                            AvaliacaoDao avaliacaoDao = new AvaliacaoDao();
+                            AvaliacaoModel avaliacao = new AvaliacaoModel();
+                            avaliacao.setIdGestorFk(idGestor);
+                            avaliacao.setJustificativa(justificativa);
+                            avaliacao.setIdSolicitacaoFk(idSol);
+                            avaliacao.setStatus(statusAvaliacao);
+                            String dataAvaliacao = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                            avaliacao.setDataAvaliacao(dataAvaliacao);
+                            avaliacaoDao.salvar(avaliacao);
                             System.out.println("--- Avaliação registrada ---");
                             System.out.println("ID do gestor: " + idGestor);
                             System.out.println("Justificativa: " + justificativa);

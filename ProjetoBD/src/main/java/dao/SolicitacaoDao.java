@@ -184,4 +184,24 @@ public class SolicitacaoDao {
 			e.printStackTrace();
 		}
 	}
+
+	public void rejeitarSolicitacao(Long idSolicitacao) {
+        String sql = "UPDATE solicitacao SET status = ? WHERE idSolicitacao = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, "REJEITADO");
+            ps.setLong(2, idSolicitacao);
+            ps.executeUpdate();
+            connection.commit();
+        } catch (Exception e) {
+            try {
+                connection.rollback();
+                System.out.println("Alterações revertidas no banco");
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            System.out.println("As informações não foram salvas no banco");
+            e.printStackTrace();
+        }
+    }
 }
