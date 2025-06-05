@@ -161,22 +161,38 @@ public class Main {
                         try {
                             List<SolicitacaoModel> solicitacoes = solicitacaoDao.listarTodos();
                             for (SolicitacaoModel s : solicitacoes) {
-                                System.out.println("ID: " + s.getIdSolicitacao() + ", Usuário: " + s.getIdUsuarioFk() + ", Espaço: " + s.getIdEspacoFK() + ", Status: " + s.getStatus());
+                                UsuarioModel usuario = usuarioDao.BuscarPorId(s.getIdUsuarioFk());
+                                String nomeUsuarioSolicitacao = usuario != null ? usuario.getNomeUsuario() : "(desconhecido)";
+                                EspacoModel espaco = espacoDao.FindById(s.getIdEspacoFK());
+                                String nomeEspaco = espaco != null ? espaco.getNome() : "(desconhecido)";
+                                System.out.println("ID: " + s.getIdSolicitacao() + ", Usuário: " + nomeUsuarioSolicitacao + ", Espaço: " + nomeEspaco + ", Status: " + s.getStatus());
                             }
-                            System.out.print("Digite o ID da solicitação para aceitar/recusar: ");
+                            System.out.print("Digite o ID da solicitação para avaliar: ");
                             Long idSol = scanner.nextLong();
                             scanner.nextLine();
-                            System.out.print("Digite 'A' para aceitar ou 'R' para recusar: ");
+                            System.out.print("Digite 'A' para aprovar ou 'R' para rejeitar: ");
                             String acao = scanner.nextLine();
+                            System.out.print("Digite a justificativa da avaliação: ");
+                            String justificativa = scanner.nextLine();
+                            Long idGestor = usuarioLogado.getIdUsuario();
+                            String statusAvaliacao;
                             if (acao.equalsIgnoreCase("A")) {
                                 solicitacaoDao.aceitarSolicitacao(idSol);
-                                System.out.println("Solicitação aceita!");
+                                statusAvaliacao = "APROVADO";
+                                System.out.println("Solicitação aprovada!");
                             } else if (acao.equalsIgnoreCase("R")) {
                                 solicitacaoDao.delete(idSol);
-                                System.out.println("Solicitação recusada e removida!");
+                                statusAvaliacao = "REJEITADO";
+                                System.out.println("Solicitação rejeitada e removida!");
                             } else {
                                 System.out.println("Ação inválida!");
+                                break;
                             }
+                            System.out.println("--- Avaliação registrada ---");
+                            System.out.println("ID do gestor: " + idGestor);
+                            System.out.println("Justificativa: " + justificativa);
+                            System.out.println("ID da solicitação: " + idSol);
+                            System.out.println("Status: " + statusAvaliacao);
                         } catch (Exception e) {
                             System.out.println("Erro ao processar solicitação: " + e.getMessage());
                         }
