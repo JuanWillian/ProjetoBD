@@ -95,19 +95,16 @@ body {
 					</div>
 					<div class="modal-body">
 						<div class="mb-3">
-							<label for="sala" class="form-label">Nome do espaço</label> <input
-								type="text" class="form-control" id="sala"
-								placeholder="Ex: 101 - Reuniões" required> <select>
-								<%
-								ArrayList<EspacoModel> espacos = (ArrayList<EspacoModel>) request.getAtributte("lista");
-								for (EspacoModel espaco : espacos) {
-								%>
-								<option><%=espaco.getNome()%></option>
-								<%
-								}
-								%>
+							<label for="sala" class="form-label">Nome do espaço</label>
+							<select class="form-control" id="sala" name="sala" required>
+								<% 
+								List<EspacoModel> espacos = (List<EspacoModel>) request.getAttribute("espacos");
+								if (espacos != null) {
+									for (EspacoModel espaco : espacos) { %>
+										<option value="<%=espaco.getNome()%>"><%=espaco.getNome()%></option>
+								<%  }
+								} %>
 							</select>
-
 						</div>
 						<div class="mb-3">
 							<label for="data" class="form-label">Data</label> <input

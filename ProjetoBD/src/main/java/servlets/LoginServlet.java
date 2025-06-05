@@ -34,22 +34,28 @@ public class LoginServlet extends HttpServlet {
 
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		 SolicitacaoDao solicitacao = new SolicitacaoDao();
-         List<SolicitacaoModel> solicitacoes;
-		try {
-			solicitacoes = solicitacao.listarSolicitacoesPorUsuario(email, email);
-			if(solicitacoes.isEmpty()) {
-		         request.setAttribute("Erro", "Nenhuma solicitação cadastrada" );
-		    }
-			request.setAttribute("lista", solicitacoes);
-	        request.getRequestDispatcher("telaSolicitante.jsp").forward(request, response);
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-         
-         
+		 // Busca email e senha da sessão
+        String email = (String) request.getSession().getAttribute("email");
+        String password = (String) request.getSession().getAttribute("password");
+        if (email == null || password == null) {
+            response.sendRedirect("index.jsp");
+            return;
+        }
+        SolicitacaoDao solicitacao = new SolicitacaoDao();
+        List<SolicitacaoModel> solicitacoes;
+        try {
+            solicitacoes = solicitacao.listarSolicitacoesPorUsuario(email, password);
+            if(solicitacoes.isEmpty()) {
+                request.setAttribute("Erro", "Nenhuma solicitação cadastrada" );
+            }
+            request.setAttribute("lista", solicitacoes);
+            dao.EspacoDao espacoDao = new dao.EspacoDao();
+            List<model.EspacoModel> espacos = espacoDao.listar();
+            request.setAttribute("espacos", espacos);
+            request.getRequestDispatcher("telaSolicitante.jsp").forward(request, response);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 	}
 
 	
@@ -74,22 +80,43 @@ public class LoginServlet extends HttpServlet {
 	
 	
 	private void handleLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
+    String email = request.getParameter("email");
+    String password = request.getParameter("password");
 
-		CargoDao dao = new CargoDao();
-		String cargo = dao.verificaCargo(email, password);
+    CargoDao dao = new CargoDao();
+    String cargo = dao.verificaCargo(email, password);
 
-		if ("GESTOR".equals(cargo)) {
-		RequestDispatcher redirecionar = request.getRequestDispatcher("telaPrincipal.jsp");
-		redirecionar.forward(request, response);
-		} else if ("SOLICITANTE".equals(cargo)) {
-			RequestDispatcher redirecionar = request.getRequestDispatcher("telaSolicitante.jsp");
-			redirecionar.forward(request, response);
-		} else {
-			request.setAttribute("erroLogin", "Usuário ou senha inválidos");
-			request.getRequestDispatcher("index.jsp").forward(request, response);
-		}
+    
+    request.getSession().setAttribute("email", email);
+    request.getSession().setAttribute("password", password);
+
+    if ("GESTOR".equals(cargo)) {
+        RequestDispatcher redirecionar = request.getRequestDispatcher("telaPrincipal.jsp");
+        redirecionar.forward(request, response);
+    } else if ("SOLICITANTE".equals(cargo)) {
+        SolicitacaoDao solicitacaoDao = new SolicitacaoDao();
+        List<SolicitacaoModel> solicitacoes = null;
+        try {
+            solicitacoes = solicitacaoDao.listarSolicitacoesPorUsuario(email, password);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        request.setAttribute("lista", solicitacoes);
+
+        dao.EspacoDao espacoDao = new dao.EspacoDao();
+        List<model.EspacoModel> espacos = null;
+        try {
+            espacos = espacoDao.listar();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        request.setAttribute("espacos", espacos);
+        RequestDispatcher redirecionar = request.getRequestDispatcher("telaSolicitante.jsp");
+        redirecionar.forward(request, response);
+    } else {
+        request.setAttribute("erroLogin", "Usuário ou senha inválidos");
+        request.getRequestDispatcher("index.jsp").forward(request, response);
+    }
 }
 
 private void handleSolicitante(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ParseException, SQLException {
