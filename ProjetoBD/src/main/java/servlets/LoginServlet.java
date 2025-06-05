@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
@@ -20,12 +21,13 @@ import model.SolicitacaoModel;
 
 @WebServlet(urlPatterns = {"/LoginServlet", "/SolicitanteServlet"})
 public class LoginServlet extends HttpServlet {
+	@Serial
 	private static final long serialVersionUID = 1L;
        
     
 	String email = "www";
 	String password = "www";
-	
+
     public LoginServlet() {
        
     }
